@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 文字エンコードをUTF-8に指定 -->
+    <meta charset="utf-8">
+    <!-- レンダリングを最新に指定 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 拡大を禁止 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>ダイエッとも</title>
+
+    <!-- Semantic UI を読み込む -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
+    <!-- Vue.js を読み込む -->
+    <script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>
+
+    <!-- 共通のCSSファイルを読み込む -->
+    <link rel="stylesheet" href="./common/style.css">
+</head>
+
+<body>
+    <!-- Vue.jsで読み込む -->
+    <div id="app">
+
+        <common-menu></common-menu>
+
+        <div class="ui main container">
+            <!-- 基本的なコンテンツはここに記載する -->
+            <div class="ui segment">
+                <form class="ui form" v-on:submit.prevent="post">
+                    <div class="field">
+                        <textarea required v-model="postForm.text"></textarea>
+                    </div>
+                    <div class="inline fields ui tiny images" v-if="images">
+                        <a class="ui image" v-for="(image, index) in images">
+                            <img :src="image.thumnail" />
+                            <button class="ui button negative basic" @click="images.splice(index, 1)">削除</button>
+                        </a>
+                    </div>
+
+                    <div class="inline fields">
+                        <div class="field">
+
+                            <label><i class="big image icon"></i><input type="file" v-on:change="onFileChange" multiple></label>
+                        </div>
+                        <div class="field">
+                            <label>
+                                カテゴリー
+                            </label>
+                            <input type="text" v-model="postForm.category">
+                        </div>
+                        <button type="submit" class="ui blue labeled icon button ">
+                            <i class="paper plane icon"></i>投稿
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="ui segments">
+                <div class="ui segment" v-for="post in sortedPosts">
+                    <div class="ui right floated red button" v-if="post.userId==userId" v-on:click="deletePost(post)">
+                        <i class="trash icon"></i>削除
+                    </div>
+                    <h2 class="ui header">
+                        <div class="content">
+                            {{post.name}}
+                        </div>
+                        <div class="sub header">
+                            {{post.date}}
+                        </div>
+                    </h2>
+                    <p>
+                        {{post.text}}
+                    </p>
+                    <div class="inline fields ui tiny images" v-if="post.imageData">
+                        <a class="ui image">
+                            <!-- <img :src= />
+                            {{post.imageData}} -->
+                        </a>
+                    </div>
+
+                    <div class="extra">
+                        <div class="ui label" v-if="post.category">
+                            {{post.category}}
+                        </div>
+                    </div>
+
+                    <div class="ui labeled button" v-if="post.userId!=userId">
+                        <div class="positive ui button" v-on:click="nice(post)" v-if="niceButton(post.likedUser, userId)"><i
+                                class="thumbs up icon"></i>痩せそう</div>
+                        <div class="positive ui button" v-on:click="nice(post)" v-else>取り消し</div>
+                        <a class="ui basic label">{{post.nice}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- APIのURLを読み込むJavaScriptファイル -->
+    <script src="./common/config.js " charset="utf-8 "></script>
+    <script src="./js/menu.js" charset="utf-8"></script>
+    <!-- 各ページで使うJavaScriptファイルはこの行より下で読み込む -->
+    <script src="./js/index.js " charset="utf-8 "></script>
+</body>
+
+</html>

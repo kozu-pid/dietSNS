@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 文字エンコードをUTF-8に指定 -->
+    <meta charset="utf-8">
+    <!-- レンダリングを最新に指定 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 拡大を禁止 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>記録</title>
+
+    <!-- Semantic UI を読み込む -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
+    <!-- Vue.js を読み込む -->
+    <script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+    <!-- 共通のCSSファイルを読み込む -->
+    <link rel="stylesheet" href="./common/style.css">
+</head>
+
+<body>
+    <!-- Vue.jsで読み込む -->
+    <div id="app">
+
+        <common-menu></common-menu>
+
+        <div class="ui main container">
+            <!-- 基本的なコンテンツはここに記載する -->
+            <div class="ui segment">
+                <h2 class="ui header">
+                    <div class="content">
+                        身長と体重を記録
+                        <div class="sub header">
+                            Record height and weight.
+                        </div>
+                    </div>
+                </h2>
+                <form class="ui form" v-on:submit.prevent="recordPost">
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="male icon"></i>
+                                <input type="number" placeholder="Height" step="0.1" min="0" required v-model="postForm.height">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="weight icon"></i>
+                                <input type="number" placeholder="Weight" step="0.1" min="0" required v-model="postForm.weight">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="ui huge green fluid button">
+                        記録
+                    </button>
+                </form>
+            </div>
+
+            <div class="ui segment">
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <div class="ui segment" v-if="func=='permit'">
+                <h2 class="ui header">
+                    <i class="calculator icon"></i>
+                    <div class="content">
+                        適正体重とBMIを計算
+                        <div class="sub header">
+                            Calculate appropriate body weight and BMI.
+                        </div>
+                    </div>
+                </h2>
+                <table class="ui definition table">
+                    <tbody>
+                        <tr>
+                            <td class="two wide column">BMI範囲</td>
+                            <td>{{BMIrange}}</td>
+                        </tr>
+                        <tr>
+                            <td>肥満度</td>
+                            <td>{{obesityDegree}}</td>
+                        </tr>
+                        <tr>
+                            <td>適正体重</td>
+                            <td>{{properWeight}}kg</td>
+                        </tr>
+                        <tr>
+                            <td>適性体重までの差</td>
+                            <td>{{weightDiff}}kg</td>
+                        </tr>
+                        <tr>
+                            <td>BMI</td>
+                            <td>{{BMI}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- APIのURLを読み込むJavaScriptファイル -->
+    <script src="./common/config.js" charset="utf-8"></script>
+    <script src="./js/menu.js" charset="uft-8"></script>
+    <!-- 各ページで使うJavaScriptファイルはこの行より下で読み込む -->
+    <script src="./js/record.js" charset="utf-8"></script>
+</body>
+
+</html>
